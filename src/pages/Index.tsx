@@ -12,7 +12,8 @@ const Index = () => {
     awardTitle: "Certificate of Love",
     issuerName: "",
     issueDate: "",
-    signature: "",
+    signature: "With boundless admiration,",
+    message: "",
   });
 
   return (

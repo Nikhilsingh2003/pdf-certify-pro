@@ -8,6 +8,7 @@ interface CertificateData {
   issuerName: string;
   issueDate: string;
   signature: string;
+  message: string;
 }
 
 export const generatePDF = (data: CertificateData) => {
@@ -70,13 +71,13 @@ export const generatePDF = (data: CertificateData) => {
   drawHeart(margin + 10, pageHeight - margin - 10, 12);
   drawHeart(pageWidth - margin - 10, pageHeight - margin - 10, 12);
 
-  // Issuer name (small text at top)
+  // Certificate of Love subheading
   doc.setFont("helvetica", "bold");
   doc.setFontSize(10);
   doc.setTextColor(219, 39, 119); // Pink color
-  doc.text(data.issuerName || "Your Name", pageWidth / 2, margin + 15, { align: "center" });
+  doc.text("Certificate of Love", pageWidth / 2, margin + 15, { align: "center" });
 
-  // Certificate title
+  // Award title
   doc.setFont("times", "bold");
   doc.setFontSize(32);
   doc.setTextColor(157, 23, 77); // Darker pink
@@ -89,36 +90,37 @@ export const generatePDF = (data: CertificateData) => {
   doc.line(pageWidth / 2 + 10, margin + 50, pageWidth / 2 + 40, margin + 50);
   drawHeart(pageWidth / 2, margin + 50, 10);
   
-  // Presented to text
+  // Message text
   doc.setFont("helvetica", "normal");
   doc.setFontSize(12);
   doc.setTextColor(219, 39, 119); // Pink
-  doc.text("This certificate is lovingly presented to", pageWidth / 2, margin + 70, { align: "center" });
+  
+  // Split message into multiple lines to fit within page width
+  const maxWidth = pageWidth - (margin * 2 + 40);
+  const messageText = data.message || `This certificate is lovingly presented to ${data.recipientName} for being an endless source of joy and inspiration. Your presence brightens every moment, and you are truly cherished.`;
+  
+  const splitMessage = doc.splitTextToSize(messageText, maxWidth);
+  const messageY = margin + 70;
+  doc.text(splitMessage, pageWidth / 2, messageY, { align: "center" });
 
-  // Recipient name
-  doc.setFont("times", "bold");
-  doc.setFontSize(28);
-  doc.setTextColor(157, 23, 77); // Darker pink
-  doc.text(data.recipientName || "Your Loved One", pageWidth / 2, margin + 90, { align: "center" });
-
-  // Description text
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.setTextColor(219, 39, 119); // Pink
-  doc.text("With all my love, appreciation, and admiration for being amazing in every way", 
-    pageWidth / 2, margin + 105, { align: "center" });
-
-  // Signature line
-  const signatureY = pageHeight - margin - 30;
+  // Calculate where the signature should be based on message length
+  const messageHeight = splitMessage.length * 7; // Approximate height based on number of lines
+  const signatureY = messageY + messageHeight + 40;
+  
+  // Signature lines
   const dateY = signatureY + 5;
   
   // Signature
   doc.setLineWidth(0.2);
   doc.setDrawColor(219, 39, 119);
   doc.line(pageWidth / 2 - 50, signatureY, pageWidth / 2 - 10, signatureY);
-  doc.text(data.signature || "Your Signature", pageWidth / 2 - 30, signatureY - 5, { align: "center" });
+  doc.text(data.signature || "With boundless admiration,", pageWidth / 2 - 30, signatureY - 10, { align: "center" });
+  
+  // Issuer name
+  doc.line(pageWidth / 2 - 50, signatureY + 15, pageWidth / 2 - 10, signatureY + 15);
+  doc.text(data.issuerName || "Your Name", pageWidth / 2 - 30, signatureY + 5, { align: "center" });
   doc.setFontSize(8);
-  doc.text("With Love From", pageWidth / 2 - 30, signatureY + 5, { align: "center" });
+  doc.text("With Love From", pageWidth / 2 - 30, signatureY + 25, { align: "center" });
 
   // Date
   doc.setLineWidth(0.2);
@@ -126,7 +128,15 @@ export const generatePDF = (data: CertificateData) => {
   doc.setFontSize(12);
   doc.text(formatDate(data.issueDate), pageWidth / 2 + 30, signatureY - 5, { align: "center" });
   doc.setFontSize(8);
+  doc.setFont("helvetica", "italic");
   doc.text("Date", pageWidth / 2 + 30, signatureY + 5, { align: "center" });
+
+  // Bottom decorative line
+  doc.setDrawColor(236, 72, 153);
+  doc.setLineWidth(0.3);
+  doc.line(pageWidth / 2 - 40, pageHeight - margin - 20, pageWidth / 2 - 10, pageHeight - margin - 20);
+  doc.line(pageWidth / 2 + 10, pageHeight - margin - 20, pageWidth / 2 + 40, pageHeight - margin - 20);
+  drawHeart(pageWidth / 2, pageHeight - margin - 20, 10);
 
   // Download the PDF
   doc.save(`${data.recipientName.replace(/\s+/g, "_")}_Love_Certificate.pdf`);

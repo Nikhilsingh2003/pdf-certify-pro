@@ -13,6 +13,7 @@ interface CertificatePreviewProps {
     issuerName: string;
     issueDate: string;
     signature: string;
+    message: string;
   };
 }
 
@@ -61,11 +62,19 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ formData }) => 
             <div className="absolute bottom-8 right-8 text-pink-300 opacity-50">
               <Heart className="h-10 w-10 fill-pink-100" />
             </div>
+            
+            {/* Decorative Elements */}
+            <div className="absolute top-24 left-1/2 transform -translate-x-1/2">
+              <div className="w-56 h-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent"></div>
+            </div>
+            <div className="absolute bottom-24 left-1/2 transform -translate-x-1/2">
+              <div className="w-56 h-1 bg-gradient-to-r from-transparent via-pink-300/50 to-transparent"></div>
+            </div>
           </div>
           
           <div className="z-10 max-w-2xl mx-auto flex flex-col items-center justify-center h-full">
             <div className="mb-2 text-pink-700 text-sm font-medium tracking-widest uppercase">
-              {formData.issuerName || "Your Name"}
+              Certificate of Love
             </div>
             
             <h1 className="text-pink-800 font-serif text-4xl md:text-5xl font-bold mb-4 tracking-tight">
@@ -78,34 +87,31 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ formData }) => 
               <div className="h-px w-16 bg-pink-300 ml-4"></div>
             </div>
             
-            <div className="text-sm text-pink-700/70 mb-4">
-              This certificate is lovingly presented to
+            <div className="text-sm text-pink-700/70 mb-6 max-w-md leading-relaxed">
+              {formData.message || `This certificate is lovingly presented to ${formData.recipientName} for being an endless source of joy and inspiration. Your presence brightens every moment, and you are truly cherished.`}
             </div>
             
-            <div className="text-3xl md:text-4xl font-serif font-bold text-pink-800 mb-6 tracking-wide">
-              {formData.recipientName || "Your Loved One"}
-            </div>
-            
-            <div className="text-sm text-pink-700/70 mb-2 max-w-md">
-              With all my love, appreciation, and admiration for being amazing in every way
-            </div>
-            
-            <div className="flex items-center justify-center mt-8">
-              <div className="flex flex-col items-center mx-5">
-                <div className="w-36 border-b border-pink-300 pb-1 mb-1">
-                  {formData.signature || "Your Signature"}
+            <div className="flex flex-col items-center mt-auto">
+              <div className="flex items-center justify-center mt-8">
+                <div className="flex flex-col items-center mx-5">
+                  <div className="w-36 border-b border-pink-300 pb-1 mb-1">
+                    {formData.signature || "With boundless admiration,"}
+                  </div>
+                  <div className="w-36 border-b border-pink-300 pb-1 mb-1 mt-3">
+                    {formData.issuerName || "Your Name"}
+                  </div>
+                  <div className="text-xs text-pink-700/70">
+                    With Love From
+                  </div>
                 </div>
-                <div className="text-xs text-pink-700/70">
-                  With Love From
-                </div>
-              </div>
-              
-              <div className="flex flex-col items-center mx-5">
-                <div className="w-36 border-b border-pink-300 pb-1 mb-1">
-                  {formData.issueDate ? formatDate(formData.issueDate) : "Date"}
-                </div>
-                <div className="text-xs text-pink-700/70">
-                  Date
+                
+                <div className="flex flex-col items-center mx-5">
+                  <div className="w-36 border-b border-pink-300 pb-1 mb-1">
+                    {formData.issueDate ? formatDate(formData.issueDate) : "Date"}
+                  </div>
+                  <div className="text-xs text-pink-700/70 italic">
+                    Date
+                  </div>
                 </div>
               </div>
             </div>

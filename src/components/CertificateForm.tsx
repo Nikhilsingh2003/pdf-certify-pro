@@ -13,6 +13,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
 
 interface CertificateFormProps {
   formData: {
@@ -21,6 +22,7 @@ interface CertificateFormProps {
     issuerName: string;
     issueDate: string;
     signature: string;
+    message: string;
   };
   setFormData: React.Dispatch<
     React.SetStateAction<{
@@ -29,6 +31,7 @@ interface CertificateFormProps {
       issuerName: string;
       issueDate: string;
       signature: string;
+      message: string;
     }>
   >;
 }
@@ -46,13 +49,15 @@ const AWARD_TITLES = [
   "Heart of Gold Award",
 ];
 
+const DEFAULT_MESSAGE = "This certificate is lovingly presented to {name} for being an endless source of joy and inspiration. Your presence brightens every moment, and you are truly cherished.";
+
 const CertificateForm: React.FC<CertificateFormProps> = ({
   formData,
   setFormData,
 }) => {
   // Handle input changes
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({
@@ -69,7 +74,7 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     }));
   };
 
-  // Set today's date as default
+  // Set today's date as default and default message
   useEffect(() => {
     if (!formData.issueDate) {
       const today = new Date().toISOString().split("T")[0];
@@ -78,7 +83,30 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
         issueDate: today,
       }));
     }
+    
+    if (!formData.message) {
+      setFormData((prev) => ({
+        ...prev,
+        message: DEFAULT_MESSAGE,
+      }));
+    }
   }, []);
+
+  // Update message when recipient name changes
+  useEffect(() => {
+    if (formData.recipientName && formData.message === DEFAULT_MESSAGE) {
+      const personalizedMessage = DEFAULT_MESSAGE.replace('{name}', formData.recipientName);
+      setFormData((prev) => ({
+        ...prev,
+        message: personalizedMessage,
+      }));
+    } else if (!formData.recipientName && formData.message.includes(formData.recipientName)) {
+      setFormData((prev) => ({
+        ...prev,
+        message: DEFAULT_MESSAGE.replace('{name}', ''),
+      }));
+    }
+  }, [formData.recipientName]);
 
   return (
     <Card className="w-full bg-white/90 backdrop-blur-sm border border-pink-100 shadow-sm animate-fade-in">
@@ -135,6 +163,24 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                 </SelectContent>
               </Select>
             </div>
+            
+            <div className="grid gap-2.5">
+              <Label htmlFor="message" className="text-sm text-gray-600">
+                Certificate Message
+              </Label>
+              <Textarea
+                id="message"
+                name="message"
+                placeholder="Enter a personalized message"
+                value={formData.message}
+                onChange={handleChange}
+                rows={4}
+                className={cn(
+                  "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70 resize-none",
+                  formData.message ? "border-pink-300" : ""
+                )}
+              />
+            </div>
 
             <div className="grid gap-2.5">
               <Label htmlFor="issuerName" className="text-sm text-gray-600">
@@ -175,13 +221,13 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
 
             <div className="grid gap-2.5">
               <Label htmlFor="signature" className="text-sm text-gray-600">
-                Signature (Optional)
+                Signature
               </Label>
               <Input
                 id="signature"
                 name="signature"
-                placeholder="How you want to sign this certificate"
-                value={formData.signature}
+                placeholder="With boundless admiration,"
+                value={formData.signature || "With boundless admiration,"}
                 onChange={handleChange}
                 className={cn(
                   "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",

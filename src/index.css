@@ -95,6 +95,14 @@
     border: 1px solid theme('colors.certificate.gold');
     pointer-events: none;
   }
+  
+  .certificate-text {
+    @apply text-pink-700/80 tracking-wide leading-relaxed max-w-md mx-auto;
+  }
+  
+  .signature-line {
+    @apply border-b border-pink-300/70 pb-1 mb-1 text-pink-800 font-medium px-4;
+  }
 }
 
 @layer utilities {
