@@ -9,10 +9,10 @@ import { Link } from "react-router-dom";
 const Index = () => {
   const [formData, setFormData] = useState({
     recipientName: "",
-    awardTitle: "Certificate of Love",
+    awardTitle: "Cutest Person Ever",
     issuerName: "",
     issueDate: "",
-    signature: "With boundless admiration,",
+    signature: "",
     message: "",
   });
 
@@ -49,8 +49,7 @@ const Index = () => {
             Create Beautiful Love Certificates
           </h1>
           <p className="text-pink-600/80 mb-6 leading-relaxed">
-            Generate romantic, high-quality certificates to express your love and appreciation. 
-            Perfect for Valentine's Day, anniversaries, or just because.
+            Generate elegant, minimalist certificates to express your love and appreciation.
           </p>
         </div>
 

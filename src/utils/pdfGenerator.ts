@@ -20,7 +20,7 @@ export const generatePDF = (data: CertificateData) => {
   });
 
   // Set background color
-  doc.setFillColor(253, 242, 248); // Soft pink background
+  doc.setFillColor(255, 255, 255); // White background
   doc.rect(0, 0, doc.internal.pageSize.getWidth(), doc.internal.pageSize.getHeight(), "F");
 
   // Set document properties for better metadata
@@ -35,28 +35,56 @@ export const generatePDF = (data: CertificateData) => {
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 20;
 
-  // Draw border decorations
-  doc.setDrawColor(236, 72, 153); // Pink color
+  // Draw border
+  doc.setDrawColor(220, 220, 220); // Light gray color
   doc.setLineWidth(0.5);
   doc.rect(margin, margin, pageWidth - margin * 2, pageHeight - margin * 2);
-  
-  doc.setDrawColor(212, 175, 55); // Gold color
-  doc.setLineWidth(0.3);
-  doc.rect(margin + 5, margin + 5, pageWidth - (margin + 5) * 2, pageHeight - (margin + 5) * 2);
 
-  // Draw hearts in corners
+  // Certificate of Love heading
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(48);
+  doc.setTextColor(200, 200, 200); // Light gray color
+  doc.text("Certificate of Love", pageWidth / 2, margin + 30, { align: "center" });
+
+  // Award title
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(32);
+  doc.setTextColor(200, 200, 200); // Light gray color
+  doc.text(data.awardTitle || "Cutest Person Ever", pageWidth / 2, margin + 50, { align: "center" });
+
+  // "This is to certify that" text
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(16);
+  doc.setTextColor(180, 180, 180); // Gray color
+  doc.text("This is to certify that", pageWidth / 2, margin + 70, { align: "center" });
+  
+  // Recipient name
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(36);
+  doc.setTextColor(200, 200, 200); // Light gray color
+  doc.text(data.recipientName || "Recipient Name", pageWidth / 2, margin + 90, { align: "center" });
+
+  // Certificate message
+  doc.setFont("helvetica", "italic");
+  doc.setFontSize(16);
+  doc.setTextColor(180, 180, 180); // Gray color
+  const messageText = "Certified as the cutest, most adorable, and sweetest soul who melts hearts effortlessly.";
+  const splitMessage = doc.splitTextToSize(messageText, pageWidth - margin * 4);
+  doc.text(splitMessage, pageWidth / 2, margin + 110, { align: "center" });
+
+  // Draw heart
   function drawHeart(x: number, y: number, size: number) {
     // Draw a heart using bezier curves
-    doc.setDrawColor(236, 72, 153);
-    doc.setFillColor(252, 231, 243);
+    doc.setDrawColor(255, 105, 180); // Pink color
+    doc.setFillColor(255, 105, 180); // Pink color
+    
     const halfSize = size / 2;
     
     doc.circle(x - halfSize/2, y - halfSize/4, halfSize/2, 'F');
     doc.circle(x + halfSize/2, y - halfSize/4, halfSize/2, 'F');
     
     // Triangle for bottom of heart
-    doc.setDrawColor(236, 72, 153);
-    doc.setFillColor(252, 231, 243);
+    doc.setFillColor(255, 105, 180); // Pink color
     doc.triangle(
       x - halfSize, y - halfSize/4,
       x + halfSize, y - halfSize/4,
@@ -65,78 +93,14 @@ export const generatePDF = (data: CertificateData) => {
     );
   }
   
-  // Draw hearts in the corners
-  drawHeart(margin + 10, margin + 10, 12);
-  drawHeart(pageWidth - margin - 10, margin + 10, 12);
-  drawHeart(margin + 10, pageHeight - margin - 10, 12);
-  drawHeart(pageWidth - margin - 10, pageHeight - margin - 10, 12);
-
-  // Certificate of Love subheading
-  doc.setFont("helvetica", "bold");
-  doc.setFontSize(10);
-  doc.setTextColor(219, 39, 119); // Pink color
-  doc.text("Certificate of Love", pageWidth / 2, margin + 15, { align: "center" });
-
-  // Award title
-  doc.setFont("times", "bold");
-  doc.setFontSize(32);
-  doc.setTextColor(157, 23, 77); // Darker pink
-  doc.text(data.awardTitle || "Certificate of Love", pageWidth / 2, margin + 40, { align: "center" });
-
-  // Decorative line with heart
-  doc.setDrawColor(236, 72, 153);
-  doc.setLineWidth(0.3);
-  doc.line(pageWidth / 2 - 40, margin + 50, pageWidth / 2 - 10, margin + 50);
-  doc.line(pageWidth / 2 + 10, margin + 50, pageWidth / 2 + 40, margin + 50);
-  drawHeart(pageWidth / 2, margin + 50, 10);
-  
-  // Message text
-  doc.setFont("helvetica", "normal");
-  doc.setFontSize(12);
-  doc.setTextColor(219, 39, 119); // Pink
-  
-  // Split message into multiple lines to fit within page width
-  const maxWidth = pageWidth - (margin * 2 + 40);
-  const messageText = data.message || `This certificate is lovingly presented to ${data.recipientName} for being an endless source of joy and inspiration. Your presence brightens every moment, and you are truly cherished.`;
-  
-  const splitMessage = doc.splitTextToSize(messageText, maxWidth);
-  const messageY = margin + 70;
-  doc.text(splitMessage, pageWidth / 2, messageY, { align: "center" });
-
-  // Calculate where the signature should be based on message length
-  const messageHeight = splitMessage.length * 7; // Approximate height based on number of lines
-  const signatureY = messageY + messageHeight + 40;
-  
-  // Signature lines
-  const dateY = signatureY + 5;
-  
-  // Signature
-  doc.setLineWidth(0.2);
-  doc.setDrawColor(219, 39, 119);
-  doc.line(pageWidth / 2 - 50, signatureY, pageWidth / 2 - 10, signatureY);
-  doc.text(data.signature || "With boundless admiration,", pageWidth / 2 - 30, signatureY - 10, { align: "center" });
-  
-  // Issuer name
-  doc.line(pageWidth / 2 - 50, signatureY + 15, pageWidth / 2 - 10, signatureY + 15);
-  doc.text(data.issuerName || "Your Name", pageWidth / 2 - 30, signatureY + 5, { align: "center" });
-  doc.setFontSize(8);
-  doc.text("With Love From", pageWidth / 2 - 30, signatureY + 25, { align: "center" });
+  // Draw heart in the center
+  drawHeart(pageWidth / 2, margin + 130, 20);
 
   // Date
-  doc.setLineWidth(0.2);
-  doc.line(pageWidth / 2 + 10, signatureY, pageWidth / 2 + 50, signatureY);
-  doc.setFontSize(12);
-  doc.text(formatDate(data.issueDate), pageWidth / 2 + 30, signatureY - 5, { align: "center" });
-  doc.setFontSize(8);
   doc.setFont("helvetica", "italic");
-  doc.text("Date", pageWidth / 2 + 30, signatureY + 5, { align: "center" });
-
-  // Bottom decorative line
-  doc.setDrawColor(236, 72, 153);
-  doc.setLineWidth(0.3);
-  doc.line(pageWidth / 2 - 40, pageHeight - margin - 20, pageWidth / 2 - 10, pageHeight - margin - 20);
-  doc.line(pageWidth / 2 + 10, pageHeight - margin - 20, pageWidth / 2 + 40, pageHeight - margin - 20);
-  drawHeart(pageWidth / 2, pageHeight - margin - 20, 10);
+  doc.setFontSize(16);
+  doc.setTextColor(180, 180, 180); // Gray color
+  doc.text(`Given with love on ${formatDate(data.issueDate)}`, pageWidth / 2, pageHeight - margin - 20, { align: "center" });
 
   // Download the PDF
   doc.save(`${data.recipientName.replace(/\s+/g, "_")}_Love_Certificate.pdf`);
