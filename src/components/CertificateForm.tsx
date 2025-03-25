@@ -4,8 +4,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
-import { CalendarIcon, Award, FileText } from "lucide-react";
+import { Heart, CalendarIcon, Award } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { 
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface CertificateFormProps {
   formData: {
@@ -26,6 +33,19 @@ interface CertificateFormProps {
   >;
 }
 
+const AWARD_TITLES = [
+  "Certificate of Love",
+  "Most Beautiful Person",
+  "Cutest Partner",
+  "Best Girlfriend/Boyfriend",
+  "Most Caring Partner",
+  "Most Supportive Partner",
+  "Best Kisser Award",
+  "Certificate of Appreciation",
+  "Partner of the Year",
+  "Heart of Gold Award",
+];
+
 const CertificateForm: React.FC<CertificateFormProps> = ({
   formData,
   setFormData,
@@ -35,6 +55,14 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  // Handle select changes
+  const handleSelectChange = (name: string, value: string) => {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
@@ -53,16 +81,16 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
   }, []);
 
   return (
-    <Card className="w-full bg-white/90 backdrop-blur-sm border border-gray-100 shadow-sm animate-fade-in">
+    <Card className="w-full bg-white/90 backdrop-blur-sm border border-pink-100 shadow-sm animate-fade-in">
       <CardContent className="p-6">
         <div className="space-y-6">
           <div className="space-y-2">
-            <div className="inline-flex items-center px-3 py-1 rounded-full bg-certificate-gold/10 text-certificate-navy">
-              <Award className="h-3.5 w-3.5 mr-2" />
-              <span className="text-xs font-medium">Certificate Details</span>
+            <div className="inline-flex items-center px-3 py-1 rounded-full bg-pink-100 text-pink-700">
+              <Heart className="h-3.5 w-3.5 mr-2 text-pink-500" />
+              <span className="text-xs font-medium">Romantic Certificate</span>
             </div>
-            <h3 className="text-xl font-serif font-semibold text-certificate-navy tracking-tight">
-              Create Your Certificate
+            <h3 className="text-xl font-serif font-semibold text-pink-800 tracking-tight">
+              Create Your Love Certificate
             </h3>
           </div>
 
@@ -74,12 +102,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               <Input
                 id="recipientName"
                 name="recipientName"
-                placeholder="Enter full name"
+                placeholder="Enter your loved one's name"
                 value={formData.recipientName}
                 onChange={handleChange}
                 className={cn(
-                  "transition-all duration-300 focus:ring-1 focus:ring-certificate-gold/50 bg-gray-50/70",
-                  formData.recipientName ? "border-certificate-gold/50" : ""
+                  "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",
+                  formData.recipientName ? "border-pink-300" : ""
                 )}
               />
             </div>
@@ -88,39 +116,46 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               <Label htmlFor="awardTitle" className="text-sm text-gray-600">
                 Award Title
               </Label>
-              <Input
-                id="awardTitle"
-                name="awardTitle"
-                placeholder="e.g. Certificate of Achievement"
+              <Select
                 value={formData.awardTitle}
-                onChange={handleChange}
-                className={cn(
-                  "transition-all duration-300 focus:ring-1 focus:ring-certificate-gold/50 bg-gray-50/70",
-                  formData.awardTitle ? "border-certificate-gold/50" : ""
-                )}
-              />
+                onValueChange={(value) => handleSelectChange("awardTitle", value)}
+              >
+                <SelectTrigger className={cn(
+                  "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",
+                  formData.awardTitle ? "border-pink-300" : ""
+                )}>
+                  <SelectValue placeholder="Select an award title" />
+                </SelectTrigger>
+                <SelectContent>
+                  {AWARD_TITLES.map((title) => (
+                    <SelectItem key={title} value={title}>
+                      {title}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
             </div>
 
             <div className="grid gap-2.5">
               <Label htmlFor="issuerName" className="text-sm text-gray-600">
-                Issuer Name
+                Your Name (Issuer)
               </Label>
               <Input
                 id="issuerName"
                 name="issuerName"
-                placeholder="Organization or individual"
+                placeholder="Enter your name"
                 value={formData.issuerName}
                 onChange={handleChange}
                 className={cn(
-                  "transition-all duration-300 focus:ring-1 focus:ring-certificate-gold/50 bg-gray-50/70",
-                  formData.issuerName ? "border-certificate-gold/50" : ""
+                  "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",
+                  formData.issuerName ? "border-pink-300" : ""
                 )}
               />
             </div>
 
             <div className="grid gap-2.5">
               <Label htmlFor="issueDate" className="text-sm text-gray-600">
-                Issue Date
+                Date
               </Label>
               <div className="relative">
                 <Input
@@ -130,8 +165,8 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
                   value={formData.issueDate}
                   onChange={handleChange}
                   className={cn(
-                    "transition-all duration-300 focus:ring-1 focus:ring-certificate-gold/50 bg-gray-50/70",
-                    formData.issueDate ? "border-certificate-gold/50" : ""
+                    "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",
+                    formData.issueDate ? "border-pink-300" : ""
                   )}
                 />
                 <CalendarIcon className="absolute right-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
@@ -145,12 +180,12 @@ const CertificateForm: React.FC<CertificateFormProps> = ({
               <Input
                 id="signature"
                 name="signature"
-                placeholder="Name of signatory"
+                placeholder="How you want to sign this certificate"
                 value={formData.signature}
                 onChange={handleChange}
                 className={cn(
-                  "transition-all duration-300 focus:ring-1 focus:ring-certificate-gold/50 bg-gray-50/70",
-                  formData.signature ? "border-certificate-gold/50" : ""
+                  "transition-all duration-300 focus:ring-1 focus:ring-pink-300 bg-gray-50/70",
+                  formData.signature ? "border-pink-300" : ""
                 )}
               />
             </div>

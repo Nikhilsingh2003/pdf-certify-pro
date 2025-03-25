@@ -30,6 +30,8 @@ export default {
           navy: "#1A365D",
           ivory: "#F8F8F5",
           accent: "#B8860B",
+          pink: "#EC4899",
+          lightPink: "#FCE7F3",
         },
         primary: {
           DEFAULT: "hsl(var(--primary))",
