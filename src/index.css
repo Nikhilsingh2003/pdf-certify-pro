@@ -56,6 +56,7 @@
   .certificate-container {
     @apply bg-white relative shadow-lg transition-all duration-300;
     aspect-ratio: 8.5 / 11;
+    background: linear-gradient(180deg, #fff8f8 0%, #fff0f5 100%);
   }
   
   .form-container {
@@ -81,16 +82,16 @@
     left: 10px;
     right: 10px;
     bottom: 10px;
-    border: 1px solid #e5e5e5;
+    border: 2px solid #f9a8d4;
     pointer-events: none;
   }
   
   .certificate-text {
-    @apply text-gray-500 tracking-wide leading-relaxed max-w-md mx-auto;
+    @apply text-pink-700 tracking-wide leading-relaxed max-w-md mx-auto;
   }
   
   .signature-line {
-    @apply border-b border-gray-300 pb-1 mb-1 text-gray-800 font-medium px-4;
+    @apply border-b border-pink-300 pb-1 mb-1 text-pink-700 font-medium px-4;
   }
 }
 

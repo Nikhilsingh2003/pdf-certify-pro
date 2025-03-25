@@ -44,29 +44,29 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ formData }) => 
       </div>
       
       <Card className="certificate-container gold-border animate-scale-up overflow-hidden">
-        <div className="w-full h-full flex flex-col items-center justify-center p-10 text-center bg-white">
+        <div className="w-full h-full flex flex-col items-center justify-center p-10 text-center">
           <div className="absolute top-0 left-0 w-full h-full z-0 pointer-events-none">
-            <div className="absolute top-3 left-3 right-3 bottom-3 border border-gray-200"></div>
+            <div className="absolute top-3 left-3 right-3 bottom-3 border-2 border-pink-200 rounded-sm"></div>
           </div>
           
           <div className="z-10 max-w-3xl mx-auto flex flex-col items-center justify-center h-full">
-            <h1 className="text-gray-300 font-serif text-5xl md:text-6xl font-semibold mb-2 tracking-wide">
+            <h1 className="text-pink-500 font-serif text-5xl md:text-6xl font-semibold mb-2 tracking-wide">
               Certificate of Love
             </h1>
             
-            <h2 className="text-gray-300 font-serif text-3xl md:text-4xl font-medium mb-10 tracking-wide">
+            <h2 className="text-pink-400 font-serif text-3xl md:text-4xl font-medium mb-10 tracking-wide">
               {formData.awardTitle || "Cutest Person Ever"}
             </h2>
             
-            <p className="text-gray-400 font-serif italic text-xl mb-10">
+            <p className="text-pink-600 font-serif italic text-xl mb-10">
               This is to certify that
             </p>
             
-            <h3 className="text-gray-300 font-serif text-5xl font-medium mb-10">
+            <h3 className="text-pink-500 font-serif text-5xl font-medium mb-10">
               {formData.recipientName || "Recipient Name"}
             </h3>
             
-            <p className="text-gray-400 font-serif italic text-xl mb-10 max-w-2xl">
+            <p className="text-pink-600 font-serif italic text-xl mb-10 max-w-2xl">
               Certified as the cutest, most adorable, and sweetest soul who melts hearts effortlessly.
             </p>
             
@@ -75,7 +75,7 @@ const CertificatePreview: React.FC<CertificatePreviewProps> = ({ formData }) => 
             </div>
             
             <div className="mt-10">
-              <p className="text-gray-400 font-serif italic text-xl">
+              <p className="text-pink-600 font-serif italic text-xl">
                 Given with love on {formData.issueDate ? formatDate(formData.issueDate) : "Date"}
               </p>
             </div>
